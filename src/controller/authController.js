@@ -15,7 +15,7 @@ const login = (req, res) => {
         const token = jwt.sign({id: user.id, name: user.name}, process.env.JWT_SECRET)
 
         res.status(200).json({
-            token,
+            token,  
             user: {
                 id: user.id,
                 name: user.name

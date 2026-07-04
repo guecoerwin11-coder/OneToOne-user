@@ -7,9 +7,7 @@ const initSocket = (io) => {
   io.on('connection', (socket) => {
     console.log(`✅ ${socket.user.name} connected!`)
 
-    // ─────────────────────────────────
     // USER COMES ONLINE
-    // ─────────────────────────────────
     updateUserStatus(socket.user.id, true)
 
     // tell EVERYONE ELSE this user is online
@@ -18,9 +16,7 @@ const initSocket = (io) => {
       name: socket.user.name
     })
 
-    // ─────────────────────────────────
     // START PRIVATE CHAT
-    // ─────────────────────────────────
     socket.on('start private chat', ({ recipientId }) => {
       // create unique room name (sorted so always same!)
       const roomId = [socket.user.id, recipientId]
@@ -36,9 +32,7 @@ const initSocket = (io) => {
       socket.emit('room joined', { roomId, recipientId })
     })
 
-    // ─────────────────────────────────
     // SEND PRIVATE MESSAGE
-    // ─────────────────────────────────
     socket.on('private message', ({ recipientId, text }) => {
       // recreate the room name
       const roomId = [socket.user.id, recipientId]
@@ -59,9 +53,7 @@ const initSocket = (io) => {
       io.to(roomId).emit('private message', message)
     })
 
-    // ─────────────────────────────────
     // TYPING INDICATOR
-    // ─────────────────────────────────
     socket.on('typing', ({ recipientId }) => {
       const roomId = [socket.user.id, recipientId]
         .sort()
@@ -81,9 +73,7 @@ const initSocket = (io) => {
       socket.to(roomId).emit('stop typing')
     })
 
-    // ─────────────────────────────────
     // DISCONNECT
-    // ─────────────────────────────────
     socket.on('disconnect', () => {
       console.log(`❌ ${socket.user.name} disconnected!`)
 
